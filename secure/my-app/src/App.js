@@ -1,4 +1,4 @@
-import logo from "./logo.svg";
+import SanitizedXss from "./components/SanitizedXss";
 import "./App.css";
 import Xss from "./components/Xss";
 
@@ -9,6 +9,7 @@ function App() {
       <br></br>
       <hr></hr>
       <Xss />
+      <SanitizedXss />
     </div>
   );
 }
