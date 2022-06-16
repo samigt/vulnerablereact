@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import serialize from "serialize-javascript";
 
 // Let's suppose this response is coming from a service and have
 // some XSS attacks in the content...
@@ -16,18 +17,17 @@ const response = [
   {
     id: 3,
     title: "My blog post 3...",
-    content: `
-      <p>
-        <img onmouseover="alert('This site is not secure');" 
-        src="attack.jpg" />
-      </p>
-    `,
+    content: `<p><img onmouseover="alert('This site is not secure');" 
+    src="attack.jpg" /></p>`,
   },
 ];
 
-// Let's suppose this is our initialState of Redux
-// which is injected to the DOM...
-const initialState = JSON.stringify(response);
+// Let's suppose this is our initialState of Redux which is
+// injected to the DOM...
+const secureInitialState = serialize(response);
+// const insecureInitialState = JSON.stringify(response);
+
+console.log(secureInitialState);
 
 const removeXSSAttacks = (html) => {
   const SCRIPT_REGEX = /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi;
@@ -45,10 +45,10 @@ const removeXSSAttacks = (html) => {
   };
 };
 
-class SanitizedXss extends Component {
+class Serialized extends Component {
   render() {
     // Parsing the JSON string to an actual object...
-    const posts = JSON.parse(initialState);
+    const posts = JSON.parse(secureInitialState);
 
     // Rendering our posts...
     return (
@@ -60,7 +60,6 @@ class SanitizedXss extends Component {
               <strong>Secure Code:</strong>
             </p>
             <p>{post.content}</p>
-
             <p>
               <strong>Insecure Code dangerouslySetInnerHTML:</strong>
             </p>
@@ -73,4 +72,4 @@ class SanitizedXss extends Component {
   }
 }
 
-export default SanitizedXss;
+export default Serialized;

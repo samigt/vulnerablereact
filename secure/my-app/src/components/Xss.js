@@ -38,7 +38,7 @@ class Xss extends Component {
       <div className="Xss">
         {posts.map((post, key) => (
           <div key={key}>
-            <h2>{post.title}</h2>
+            <h3>{post.title}</h3>
             <p>
               <strong>Secure Code:</strong>
             </p>
